@@ -20,7 +20,7 @@ This repository contains scripts and data for generating synthetic datasets, cal
   - `realworld.py`: Processes the UNSW dataset, applies robust preprocessing, and computes fairness metrics using bootstrapping.
  
 - **Statistical Significance Testing**
-  - 'test.py`: Performs statistical significance testing on the fairness metrics using the Mann-Whitney U test to assess whether observed differences between groups (e.g., protocols) are statistically robust.
+  - `test.py`: Performs statistical significance testing on the fairness metrics using the Mann-Whitney U test to assess whether observed differences between groups (e.g., protocols) are statistically robust.
  
 - **Classical Fairness Metrics**
   - `classic_metrics.py`: Computes classical fairness metrics (SPD and EOD) using TCP as the reference group and outputs results in CSV and LaTeX formats.
