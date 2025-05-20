@@ -67,15 +67,21 @@ python realworld.py
 ```
 
 The script will:
+
 Load selected columns from all .csv files in the directory.
+
 Preprocess and clean the data.
+
 Generate fairness metrics:
-φ_ind: Alert disparity by protocol.
-φ_sep: F1-score by protocol.
-δ_cal: Calibration gap by score.
+
+**φ_ind**: Alert disparity by protocol.  
+**φ_sep**: F1-score by protocol.  
+**δ_cal**: Calibration gap by score.  
+
 Save results as .csv and .png files:
-phi_ind_bootstrap.csv, phi_ind_raw.csv, phi_ind_unsw.png
-phi_sep_bootstrap.csv, phi_sep_raw.csv, phi_sep_unsw.png
+
+phi_ind_bootstrap.csv, phi_ind_raw.csv, phi_ind_unsw.png  
+phi_sep_bootstrap.csv, phi_sep_raw.csv, phi_sep_unsw.png  
 delta_cal.csv, delta_cal_unsw.png
 
 To ensure the robustness of the fairness metrics, the script uses bootstrapping, a statistical resampling technique. Each metric is computed multiple times (e.g., 1000 iterations) on randomly sampled subsets of the data (with replacement). This allows the estimation of:
@@ -93,10 +99,12 @@ python test.py
 ```
 This script performs Mann-Whitney U tests on:
 
-φ_sep: Compares detection quality (F1-score) between ospf and tcp.
-φ_ind: Compares alert distribution between tcp and ospf.
-δ_cal: Compares calibration consistency between the lowest and highest score levels.
+- **φ_sep**: Compares detection quality (F1-score) between `ospf` and `tcp`.  
+- **φ_ind**: Compares alert distribution between `tcp` and `ospf`.  
+- **δ_cal**: Compares calibration consistency between the lowest and highest score levels.  
+
 The output includes descriptive statistics and p-values indicating whether the differences are statistically significant.
+
 
 ### Classical Fairness Metrics
 To compute classical fairness metrics such as Statistical Parity Difference (SPD) and Equal Opportunity Difference (EOD), run:
