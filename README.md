@@ -1,6 +1,6 @@
 # Fairness Metrics and Analysis
 
-This repository contains scripts and data for generating synthetic datasets, calculating fairness metrics, and analyzing temporal trends. It also includes processing scripts for real-world data from the CIC IDS 2017 dataset.
+This repository contains scripts and data for generating synthetic datasets, calculating fairness metrics, and analyzing temporal trends. It also includes processing scripts for real-world data from the UNSW dataset.
 
 ## Directory Structure
 
@@ -147,4 +147,4 @@ pip install pandas numpy matplotlib seaborn scikit-learn scipy
 
 ## Acknowledgments
 
-- The UNSW-NB15 dataset was created by the Cyber Range Lab at UNSW Canberra and is provided for academic use by Nour Moustafa and Jill Slay.
+- The UNSW dataset was created by the Cyber Range Lab at UNSW Canberra and is provided for academic use by Nour Moustafa and Jill Slay.
