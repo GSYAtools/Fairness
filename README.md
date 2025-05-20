@@ -87,7 +87,9 @@ delta_cal.csv, delta_cal_unsw.png
 To ensure the robustness of the fairness metrics, the script uses bootstrapping, a statistical resampling technique. Each metric is computed multiple times (e.g., 1000 iterations) on randomly sampled subsets of the data (with replacement). This allows the estimation of:
 
 Mean: The average value of the metric across all resamples.
+
 Standard deviation (std): A measure of variability, indicating how much the metric fluctuates across different samples.
+
 This approach provides confidence intervals and helps assess the stability and reliability of the fairness metrics across different groups (e.g., protocols).
 
 
@@ -113,10 +115,13 @@ To compute classical fairness metrics such as Statistical Parity Difference (SPD
 python classic_metrics.py
 ```
 This script loads and preprocesses the UNSW dataset, and then calculates:
-SPD: Difference in alert rates between each protocol and the reference group (tcp).
-EOD: Difference in true positive rates (recall) between each protocol and tcp.
+
+SPD: Difference in alert rates between each protocol and the reference group (tcp).  
+EOD: Difference in true positive rates (recall) between each protocol and tcp.  
+
 and saves the results in:
-fairness_classic_metrics.csv: A CSV summary of SPD and EOD by platform.
+
+fairness_classic_metrics.csv: A CSV summary of SPD and EOD by platform.  
 fairness_classic_metrics.tex: A LaTeX-formatted table for inclusion in reports or publications.
 
 ### Fairness Metric Compatibility Analysis
@@ -128,14 +133,20 @@ python compatibility.py
 This script:
 
 Loads and preprocesses the UNSW dataset.
+
 Computes three fairness metrics per platform:
-φ_ind: Alert rate relative to platform prevalence.
-φ_sep: F1-score of alert vs. confirmation.
-δ_cal: Calibration deviation across score levels.
+
+**φ_ind**: Alert rate relative to platform prevalence.  
+**φ_sep**: F1-score of alert vs. confirmation.  
+**δ_cal**: Calibration deviation across score levels.  
+
 Flags platforms where metrics exceed empirical thresholds.
+
 Computes correlations between the metrics.
+
 Saves the results in:
-fairness_metric_compatibility.csv: CSV with metric values and activation flags.
+
+fairness_metric_compatibility.csv: CSV with metric values and activation flags.  
 fairness_metric_compatibility.tex: LaTeX-formatted table for reports.
 
 ## Dependencies
