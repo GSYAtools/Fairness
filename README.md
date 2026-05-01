@@ -23,6 +23,7 @@ This repository contains scripts and data for generating synthetic datasets, cal
 
 - **Real-World Data Processing**
   - `realworld.py`: Processes the UNSW dataset, applies robust preprocessing, and computes fairness metrics using bootstrapping.
+  - `getN.py`: **(NEW)** Reports the total number of records before and after preprocessing ($N_{\text{raw}}$ and $N_{\text{filtered}}$), enabling independent verification of the dataset size reported in the paper.
  
 - **Statistical Significance Testing**
   - `test_hip.py`: Performs statistical significance testing on the fairness metrics using the Mann-Whitney U test, including **rank-biserial correlation as effect size** **(UPDATED)** to complement p-values under large sample sizes. Outputs results to `hypothesis_test_results.csv`.
@@ -132,6 +133,18 @@ Standard deviation (std): A measure of variability, indicating how much the metr
 
 This approach provides confidence intervals and helps assess the stability and reliability of the fairness metrics across different groups (e.g., protocols).
 
+### Verifying Dataset Size **(NEW)**
+
+To independently verify the number of records used in the analysis (as reported in the paper), run:
+```bash
+python getN.py
+```
+
+This script applies the same loading and preprocessing pipeline as `realworld.py` and reports:
+- **N raw**: Total records loaded from all CSV partitions.
+- **N after filtering**: Records retained after removing rows with missing values in `dur`, `Spkts`, `proto`, or `Stime`.
+
+Expected output: `N = 2,540,047` (no records lost during filtering).
 
 ### Statistical Significance Testing
 After generating the fairness metrics, you can run the following script to test whether the observed differences are statistically significant. Run:
