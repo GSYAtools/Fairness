@@ -86,9 +86,10 @@ This script:
   - `delta_cal_all_scenarios.png`: Calibration Sufficiency across all scenarios.
 
 The metric isolation analysis verifies that each proposed metric responds selectively to its intended fairness dimension:
-- **Ï†_ind** activates under alert-only bias (IoT reaches 2.37) but remains near baseline (~1.0) under calibration-only bias.
-- **Î´_cal** activates under calibration-only bias (values 0.18â€“0.22) but remains near baseline (~0.02) under alert-only bias.
-- **Ï†_sep** shows expected cross-sensitivity under alert-only bias, consistent with the operational semantics of detection quality.
+
+- **φ_ind*** activates under alert-only bias (IoT reaches 2.37) but remains near baseline (~1.0) under calibration-only bias.
+- **φ_sep** activates under calibration-only bias (values 0.18â€“0.22) but remains near baseline (~0.02) under alert-only bias.
+- **δ_cal*** shows expected cross-sensitivity under alert-only bias, consistent with the operational semantics of detection quality.
 
 ### Temporal Analysis
 
@@ -113,9 +114,9 @@ Preprocess and clean the data.
 
 Generate fairness metrics:
 
-**Ï†_ind**: Alert disparity by protocol.  
-**Ï†_sep**: F1-score by protocol.  
-**Î´_cal**: Calibration gap by score.  
+**φ_ind**: Alert disparity by protocol.  
+**φ_sep**: F1-score by protocol.  
+**δ_cal**: Calibration gap by score. 
 
 Save results as .csv and .png files:
 
@@ -140,9 +141,9 @@ python test_hip.py
 ```
 This script performs Mann-Whitney U tests on:
 
-- **Ï†_sep**: Compares detection quality (F1-score) between `ospf` and `tcp`.  
-- **Ï†_ind**: Compares alert distribution between `tcp` and `ospf`.  
-- **Î´_cal**: Compares calibration consistency between the lowest and highest score levels.  
+- **φ_sep**: Compares detection quality (F1-score) between `ospf` and `tcp`.  
+- **φ_ind**: Compares alert distribution between `tcp` and `ospf`.  
+- **δ_cal**: Compares calibration consistency between the lowest and highest score levels.  
 
 The output includes descriptive statistics, p-values, **and rank-biserial correlation as effect size** **(UPDATED)** to assess both the statistical significance and practical magnitude of the observed differences. Effect sizes are interpreted as: |r| < 0.1 negligible, < 0.3 small, < 0.5 medium, â‰¥ 0.5 large. Results are saved to `hypothesis_test_results.csv`.
 
@@ -175,9 +176,9 @@ Loads and preprocesses the UNSW dataset.
 
 Computes three fairness metrics per platform:
 
-**Ï†_ind**: Alert rate relative to platform prevalence.  
-**Ï†_sep**: F1-score of alert vs. confirmation.  
-**Î´_cal**: Calibration deviation across score levels.  
+**φ_ind**: Alert rate relative to platform prevalence.  
+**φ_sep**: F1-score of alert vs. confirmation.  
+**δ_cal**: Calibration deviation across score levels.
 
 Flags platforms where metrics exceed empirical thresholds.
 
