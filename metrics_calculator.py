@@ -100,7 +100,7 @@ combined_table.to_csv("metric_table_all.csv", index=False)
 # ----------------------------
 # 6. Funciones de visualización
 # ----------------------------
-def plot_comparison(df, title, filename):
+def plot_comparison(df, filename):
     df = df.copy()
     df['Biased'] = pd.to_numeric(df['Biased'], errors='coerce')
     df['Neutral'] = pd.to_numeric(df['Neutral'], errors='coerce')
@@ -111,12 +111,11 @@ def plot_comparison(df, title, filename):
     plot_df['Label'] = plot_df['Metric'] + ', ' + plot_df['Dataset']
     plt.figure(figsize=(8, 5))
     sns.barplot(data=plot_df, x='Group', y='Value', hue='Label')
-    plt.title(title)
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
 
-def plot_comparison_per_metric(df, dimension_label, title, filename):
+def plot_comparison_per_metric(df, dimension_label, filename):
     subset = df[df['Dimension'] == dimension_label].copy()
     subset['Biased'] = pd.to_numeric(subset['Biased'], errors='coerce')
     subset['Neutral'] = pd.to_numeric(subset['Neutral'], errors='coerce')
@@ -127,7 +126,6 @@ def plot_comparison_per_metric(df, dimension_label, title, filename):
     plot_df['Label'] = plot_df['Metric'] + ', ' + plot_df['Dataset']
     plt.figure(figsize=(8, 5))
     sns.barplot(data=plot_df, x='Group', y='Value', hue='Label')
-    plt.title(title)
     plt.tight_layout()
     plt.savefig(filename)
     plt.close()
@@ -135,38 +133,28 @@ def plot_comparison_per_metric(df, dimension_label, title, filename):
 # ----------------------------
 # 7. Gráficos Extendidas: Biased vs Neutral
 # ----------------------------
-plot_comparison(indep_table, "Operational Independence: Biased vs Neutral", "phi_ind_comparison_full.png")
-plot_comparison(sep_table, "Detection Separation: Biased vs Neutral", "phi_sep_comparison_full.png")
-plot_comparison(suff_table, "Calibration Sufficiency: Biased vs Neutral", "delta_cal_comparison_full.png")
+plot_comparison(indep_table, "phi_ind_comparison_full.png")
+plot_comparison(sep_table, "phi_sep_comparison_full.png")
+plot_comparison(suff_table, "delta_cal_comparison_full.png")
 
 # ----------------------------
-# 8. Comparación Clásicas vs Extendidas: NEUTRAL
+# 8. Comparación Clásicas vs Extendidas: 1 figura por métrica
 # ----------------------------
-for dim, title, file in [
-    (r'$\phi_{\text{ind}}$', "Neutral Dataset: Independence", "comparison_neutral_phi_ind.png"),
-    (r'$\phi_{\text{sep}}$', "Neutral Dataset: Separation", "comparison_neutral_phi_sep.png"),
+for dim, file in [
+    (r'$\phi_{\text{ind}}$', "comparison_classical_extended_phi_ind.png"),
+    (r'$\phi_{\text{sep}}$', "comparison_classical_extended_phi_sep.png"),
 ]:
-    plot_comparison_per_metric(combined_table.copy(), dim, title, file)
+    plot_comparison_per_metric(combined_table.copy(), dim, file)
 
 # ----------------------------
-# 9. Comparación Clásicas vs Extendidas: BIASED
-# ----------------------------
-for dim, title, file in [
-    (r'$\phi_{\text{ind}}$', "Biased Dataset: Independence", "comparison_biased_phi_ind.png"),
-    (r'$\phi_{\text{sep}}$', "Biased Dataset: Separation", "comparison_biased_phi_sep.png"),
-]:
-    plot_comparison_per_metric(combined_table.copy(), dim, title, file)
-
-# ----------------------------
-# 10. Gráficos SEPARADOS para Sufficiency clásica y extendida
+# 9. Gráficos SEPARADOS para Sufficiency clásica y extendida
+#    (dimensiones distintas: extended por score, classical por plataforma)
 # ----------------------------
 
-# Sufficienty extendida: por score
-plot_comparison(suff_table,
-                "Calibration Sufficiency (Extended) by Score",
-                "sufficiency_extended_delta_cal.png")
+# Sufficiency extendida: por score
+plot_comparison(suff_table, "sufficiency_extended_delta_cal.png")
 
-# Sufficienty clásica: por plataforma
+# Sufficiency clásica: por plataforma
 suff_classic_df = classic_table[classic_table['Dimension'] == r'$\delta_{\text{cal}}$'].copy()
 suff_classic_df['Biased'] = pd.to_numeric(suff_classic_df['Biased'], errors='coerce')
 suff_classic_df['Neutral'] = pd.to_numeric(suff_classic_df['Neutral'], errors='coerce')
@@ -179,7 +167,6 @@ plot_df['Label'] = plot_df['Metric'] + ', ' + plot_df['Dataset']
 
 plt.figure(figsize=(8, 5))
 sns.barplot(data=plot_df, x='Group', y='Value', hue='Label')
-plt.title("Calibration Sufficiency (Classical) by Platform")
 plt.tight_layout()
 plt.savefig("sufficiency_classical_platform.png")
 plt.close()
