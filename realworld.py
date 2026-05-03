@@ -5,7 +5,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, recall_score
 
 sns.set(style="whitegrid")
 plt.rcParams["figure.dpi"] = 300
@@ -13,7 +13,7 @@ plt.rcParams["figure.dpi"] = 300
 # ----------------------------
 # Carga de datos
 # ----------------------------
-data_dir = 'C:/Fairness/UNSW'
+data_dir = 'D:/Fairness/UNSW'
 usecols = [4, 7, 17, 29, 48]  # proto, dur, Spkts, Stime, Label
 column_names = ['proto', 'dur', 'Spkts', 'Stime', 'Label']
 
@@ -139,3 +139,55 @@ plt.xlabel("Score")
 plt.tight_layout()
 plt.savefig("delta_cal_unsw.png")
 plt.close()
+
+# ----------------------------
+# Classical fairness metrics: SPD and EOD
+# ----------------------------
+ref_group = 'tcp'
+
+# SPD: Statistical Parity Difference
+# SPD(a) = P(Ŷ=1|A=a) - P(Ŷ=1|A=ref)
+alert_rate = fair_df.groupby('platform')['alert'].mean()
+spd = alert_rate - alert_rate.get(ref_group, 0)
+
+# EOD: Equal Opportunity Difference
+# EOD(a) = P(Ŷ=1|Y*=1,A=a) - P(Ŷ=1|Y*=1,A=ref)
+def recall_group(group):
+    positives = group[group['confirmed'] == 1]
+    if len(positives) == 0:
+        return 0.0
+    return positives['alert'].mean()
+
+recall_per_group = fair_df.groupby('platform').apply(recall_group)
+ref_recall = recall_group(fair_df[fair_df['platform'] == ref_group])
+eod = recall_per_group - ref_recall
+
+classical_df = pd.DataFrame({
+    'alert_rate': alert_rate.round(6),
+    'SPD (vs tcp)': spd.round(6),
+    'recall': recall_per_group.round(6),
+    'EOD (vs tcp)': eod.round(6)
+}).sort_index()
+
+classical_df.to_csv("fairness_classic_metrics.csv")
+print("\nClassical fairness metrics (SPD and EOD):")
+print(classical_df.to_string())
+
+# LaTeX table
+latex_lines = [
+    "\\begin{table}[ht]",
+    "\\centering",
+    "\\caption{Classical fairness metrics (SPD and EOD) by protocol, using TCP as reference.}",
+    "\\label{tab:classic_fairness}",
+    "\\begin{tabular}{lcccc}",
+    "\\hline",
+    "\\textbf{Platform} & \\textbf{Alert Rate} & \\textbf{SPD} & \\textbf{Recall} & \\textbf{EOD} \\\\",
+    "\\hline"
+]
+for idx, row in classical_df.iterrows():
+    latex_lines.append(f"{idx} & {row['alert_rate']:.4f} & {row['SPD (vs tcp)']:.4f} & {row['recall']:.4f} & {row['EOD (vs tcp)']:.4f} \\\\")
+latex_lines += ["\\hline", "\\end{tabular}", "\\end{table}"]
+
+with open("fairness_classic_metrics.tex", "w") as f:
+    f.write("\n".join(latex_lines))
+print("LaTeX table saved to fairness_classic_metrics.tex")
